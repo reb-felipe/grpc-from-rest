@@ -5,11 +5,35 @@ import (
 	"errors"
 	"github.com/reb-felipe/grpc-from-rest/domain/entity"
 	"sync"
+	"time"
 )
+
+var initialUsers = map[string]*entity.User{
+	"xyz": {
+		ID:        "xyz",
+		Name:      "John Doe",
+		CreatedAt: time.Now(),
+		Coordinates: []float64{
+			12.35, 15.231,
+		},
+	},
+	"xpto": {
+		ID:        "xpto",
+		Name:      "Tyler Durden",
+		CreatedAt: time.Now().UTC(),
+	},
+}
+
+func NewUsers() *Users {
+	return &Users{
+		users: initialUsers,
+		m:     new(sync.Mutex),
+	}
+}
 
 type Users struct {
 	users map[string]*entity.User
-	m     sync.Mutex
+	m     *sync.Mutex
 }
 
 func (u *Users) CreateUser(ctx context.Context, user *entity.User) (*entity.User, error) {

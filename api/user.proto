@@ -1,0 +1,42 @@
+syntax="proto3";
+
+package users_grpc;
+
+option go_package="internal/infrastructure/http/grpc";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message IDInput {
+  string id = 1;
+}
+
+message UpdateUserInput {
+  string id = 1;
+  UserInput data = 2;
+}
+
+message UserInput {
+  string name = 1;
+  repeated double coordinates = 2;
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  google.protobuf.Timestamp created_at = 3;
+  repeated double coordinates = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message UsersList {
+  repeated User users = 1;
+}
+
+service Users {
+  rpc Create(UserInput) returns (User);
+  rpc Update(UpdateUserInput) returns (User);
+  rpc Delete(IDInput) returns (google.protobuf.Empty);
+  rpc Get(IDInput) returns (User);
+  rpc List(google.protobuf.Empty) returns (UsersList);
+}

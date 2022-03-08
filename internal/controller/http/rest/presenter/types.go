@@ -1,4 +1,4 @@
-package rest
+package presenter
 
 import (
 	"github.com/reb-felipe/grpc-from-rest/domain/entity"
@@ -12,15 +12,12 @@ type CreateOrUpdateUserRequest struct {
 
 func (c *CreateOrUpdateUserRequest) ToEntity() *entity.User {
 	return &entity.User{
-		ID:          "",
 		Name:        c.Name,
-		CreatedAt:   time.Time{},
 		Coordinates: c.Coordinates,
-		UpdatedAt:   nil,
 	}
 }
 
-func userFromEntity(u *entity.User) *User {
+func UserFromEntity(u *entity.User) *User {
 	return &User{
 		ID:          u.ID,
 		Name:        u.Name,
@@ -46,4 +43,12 @@ func (u *User) ToEntity() *entity.User {
 		Coordinates: u.Coordinates,
 		UpdatedAt:   u.UpdatedAt,
 	}
+}
+
+type ListUserReponse struct {
+	Results []*User `json:"results"`
+}
+
+type ErrorMessage struct {
+	Message string `json:"message"`
 }
