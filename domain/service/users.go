@@ -7,6 +7,12 @@ import (
 	"time"
 )
 
+func NewUsers(repository UsersRepository) *Users {
+	return &Users{
+		repository: repository,
+	}
+}
+
 type Users struct {
 	repository UsersRepository
 }

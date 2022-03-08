@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/reb-felipe/grpc-from-rest/domain/entity"
+	"github.com/reb-felipe/grpc-from-rest/internal/controller/http/rest/presenter"
 	"io/ioutil"
 	"net/http"
 )
@@ -22,7 +23,7 @@ type Client struct {
 }
 
 func (c *Client) CreateUser(ctx context.Context, name string, coordinates []float64) (*entity.User, error) {
-	b, err := json.Marshal(CreateOrUpdateUserPayload{
+	b, err := json.Marshal(presenter.CreateOrUpdateUserRequest{
 		Name:        name,
 		Coordinates: coordinates,
 	})
@@ -46,7 +47,7 @@ func (c *Client) CreateUser(ctx context.Context, name string, coordinates []floa
 		return nil, err
 	}
 
-	var user User
+	var user presenter.User
 	if err := json.Unmarshal(b, &user); err != nil {
 		return nil, err
 	}
@@ -55,7 +56,7 @@ func (c *Client) CreateUser(ctx context.Context, name string, coordinates []floa
 }
 
 func (c *Client) UpdateUser(ctx context.Context, userID string, name string, coordinates []float64) (*entity.User, error) {
-	b, err := json.Marshal(CreateOrUpdateUserPayload{
+	b, err := json.Marshal(presenter.CreateOrUpdateUserRequest{
 		Name:        name,
 		Coordinates: coordinates,
 	})
@@ -79,7 +80,7 @@ func (c *Client) UpdateUser(ctx context.Context, userID string, name string, coo
 		return nil, err
 	}
 
-	var user User
+	var user presenter.User
 	if err := json.Unmarshal(b, &user); err != nil {
 		return nil, err
 	}
@@ -104,13 +105,13 @@ func (c *Client) ListUsers(ctx context.Context) ([]*entity.User, error) {
 		return nil, err
 	}
 
-	var response ListUserResponse
+	var response presenter.ListUserReponse
 	if err := json.Unmarshal(b, &response); err != nil {
 		return nil, err
 	}
 
-	users := make([]*entity.User, len(response.Result))
-	for i, v := range response.Result {
+	users := make([]*entity.User, len(response.Results))
+	for i, v := range response.Results {
 		users[i] = v.ToEntity()
 	}
 
@@ -118,7 +119,7 @@ func (c *Client) ListUsers(ctx context.Context) ([]*entity.User, error) {
 }
 
 func (c *Client) DeleteUser(ctx context.Context, userID string) error {
-	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/%s", c.addr, userID), nil)
+	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/%s", c.addr, userID), nil)
 	if err != nil {
 		return err
 	}
@@ -138,7 +139,7 @@ func (c *Client) DeleteUser(ctx context.Context, userID string) error {
 		return err
 	}
 
-	var errMsg ErrorMessage
+	var errMsg presenter.ErrorMessage
 	if err := json.Unmarshal(b, &errMsg); err != nil {
 		return err
 	}
@@ -163,7 +164,7 @@ func (c *Client) GetUser(ctx context.Context, id string) (*entity.User, error) {
 		return nil, err
 	}
 
-	var user User
+	var user presenter.User
 	if err := json.Unmarshal(b, &user); err != nil {
 		return nil, err
 	}
