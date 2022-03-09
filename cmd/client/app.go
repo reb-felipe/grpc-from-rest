@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func NewApp(t *Terminal, client Client) *App {
+func NewApp(t *Terminal, client UsersClient) *App {
 	return &App{
 		terminal: t,
 		client:   client,
@@ -20,7 +20,7 @@ func NewApp(t *Terminal, client Client) *App {
 
 type App struct {
 	terminal *Terminal
-	client   Client
+	client   UsersClient
 }
 
 func (a *App) Run() {

@@ -7,15 +7,15 @@ import (
 	"net/http"
 )
 
-func NewRest(users *service.Users) *Rest {
-	return &Rest{users: users}
+func NewUsers(users *service.Users) *UsersController {
+	return &UsersController{users: users}
 }
 
-type Rest struct {
+type UsersController struct {
 	users *service.Users
 }
 
-func (r *Rest) CreateUser(ctx *gin.Context) {
+func (r *UsersController) CreateUser(ctx *gin.Context) {
 	var request presenter.CreateOrUpdateUserRequest
 	if err := ctx.BindJSON(&request); err != nil {
 		return
@@ -30,7 +30,7 @@ func (r *Rest) CreateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, presenter.UserFromEntity(user))
 }
 
-func (r *Rest) UpdateUser(ctx *gin.Context) {
+func (r *UsersController) UpdateUser(ctx *gin.Context) {
 	userID := ctx.Param("userID")
 	var request presenter.CreateOrUpdateUserRequest
 	if err := ctx.BindJSON(&request); err != nil {
@@ -49,7 +49,7 @@ func (r *Rest) UpdateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, presenter.UserFromEntity(update))
 }
 
-func (r *Rest) DeleteUser(ctx *gin.Context) {
+func (r *UsersController) DeleteUser(ctx *gin.Context) {
 	userID := ctx.Param("userID")
 
 	err := r.users.DeleteUser(ctx, userID)
@@ -59,7 +59,7 @@ func (r *Rest) DeleteUser(ctx *gin.Context) {
 	}
 }
 
-func (r *Rest) ListUsers(ctx *gin.Context) {
+func (r *UsersController) ListUsers(ctx *gin.Context) {
 	users, err := r.users.ListUsers(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, presenter.ErrorMessage{Message: err.Error()})
@@ -75,7 +75,7 @@ func (r *Rest) ListUsers(ctx *gin.Context) {
 	})
 }
 
-func (r *Rest) GetUser(ctx *gin.Context) {
+func (r *UsersController) GetUser(ctx *gin.Context) {
 	userID := ctx.Param("userID")
 
 	user, err := r.users.GetUser(ctx, userID)

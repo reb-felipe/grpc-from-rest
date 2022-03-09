@@ -4,16 +4,16 @@ import (
 	"context"
 	"github.com/reb-felipe/grpc-from-rest/domain/entity"
 	"github.com/reb-felipe/grpc-from-rest/internal/controller/http/grpc/presenter"
-	grpc2 "github.com/reb-felipe/grpc-from-rest/internal/infrastructure/http/grpc"
+	gen "github.com/reb-felipe/grpc-from-rest/internal/infrastructure/http/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func NewClient(users grpc2.UsersClient) *Client {
+func NewClient(users gen.UsersClient) *Client {
 	return &Client{users: users}
 }
 
 type Client struct {
-	users grpc2.UsersClient
+	users gen.UsersClient
 }
 
 func (c *Client) CreateUser(ctx context.Context, name string, coordinates []float64) (*entity.User, error) {

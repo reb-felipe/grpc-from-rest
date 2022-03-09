@@ -32,7 +32,7 @@ type User struct {
 	Name        string     `json:"name"`
 	CreatedAt   time.Time  `json:"created_at"`
 	Coordinates []float64  `json:"coordinates"`
-	UpdatedAt   *time.Time `json:"updated_at"`
+	UpdatedAt   *time.Time `json:"updated_at,omitempty"`
 }
 
 func (u *User) ToEntity() *entity.User {

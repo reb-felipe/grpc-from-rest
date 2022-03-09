@@ -9,12 +9,12 @@ import (
 )
 
 func main() {
-	repo := mem.NewUsers()
-	svc := service.NewUsers(repo)
-	ctrl := rest.NewRest(svc)
-	srv := server.NewServer(&server.Config{
-		Controller: ctrl,
+	repository := mem.NewUsers()
+	service := service.NewUsers(repository)
+	controller := rest.NewUsers(service)
+	server := server.NewServer(&server.Config{
+		Controller: controller,
 		Addr:       ":8081",
 	})
-	log.Fatal(srv.ListenAndServe())
+	log.Fatal(server.ListenAndServe())
 }

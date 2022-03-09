@@ -15,7 +15,7 @@ func main() {
 	ctrl := grpc.NewUsers(svc)
 	srv := server.NewServer(ctrl)
 
-	l, err := net.Listen("tcp", "localhost:8081")
+	l, err := net.Listen("tcp", "localhost:50051")
 	if err != nil {
 		panic(err)
 	}

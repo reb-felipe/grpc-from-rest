@@ -5,7 +5,7 @@ import (
 	"github.com/reb-felipe/grpc-from-rest/domain/entity"
 )
 
-type Client interface {
+type UsersClient interface {
 	CreateUser(ctx context.Context, name string, coordinates []float64) (*entity.User, error)
 	UpdateUser(ctx context.Context, userID string, name string, coordinates []float64) (*entity.User, error)
 	ListUsers(ctx context.Context) ([]*entity.User, error)
